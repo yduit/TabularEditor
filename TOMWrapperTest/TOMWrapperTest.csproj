@@ -89,6 +89,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="UndoManagerTests.cs" />
+    <Compile Include="ModelMetadataTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TestGenerator.tt">
