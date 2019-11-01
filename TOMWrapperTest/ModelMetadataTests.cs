@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -65,6 +66,14 @@ namespace TOMWrapperTest
             Assert.AreEqual(measureName, measure.Name);
             Assert.AreEqual("[Reseller Distinct Count Sales Order] + [Internet Distinct Count Sales Order]", measure.Expression);
             Assert.AreEqual("Sales Territory", measure.Table.Name);
+            var depends = measure.DependsOn;
+            var relatedMeasures= depends.Measures.ToList();
+            Assert.AreEqual(2, relatedMeasures.Count);
+            Assert.AreEqual("Reseller Sales", relatedMeasures[0].Table.Name);
+            Assert.AreEqual("Internet Sales", relatedMeasures[1].Table.Name);
+
+            var refBy = relatedMeasures[0].ReferencedBy; //measureName = "Distinct Count Sales Orders";
+            Assert.AreEqual(1, refBy.Count);
         }
 
         [TestMethod]
@@ -81,17 +90,22 @@ namespace TOMWrapperTest
             Assert.AreEqual("Sales Territory", measure.Table.Name);
 
             // process expression to leaf level measure
+            //var regx = new Regex(@"(?<func1>[a-z]+)\(\[(?<numerator>.+)\]\)/(?<func2>[a-z]+)\(\[(?<denominator>.+)\]\)", RegexOptions.IgnoreCase);
+
+            var regx2 = new Regex(@"('.*?')?\[.*?\]", RegexOptions.IgnoreCase); // or: @"\[[^]]+\]"  @"\[.*?\]"
+
             foreach (var m in measures)
             {
-                //var regx = new Regex(@"(?<func1>[a-z]+)\(\[(?<numerator>.+)\]\)/(?<func2>[a-z]+)\(\[(?<denominator>.+)\]\)", RegexOptions.IgnoreCase);
-                var regx = new Regex(@"(?<=\[).+?(?=\])", RegexOptions.IgnoreCase);
-                var match = regx.Match(m.Expression);
-                if (match.Success)
+
+                MatchCollection matches = regx2.Matches(m.Expression);
+                if (matches.Count > 2)
                 {
-                    var func1 = match.Groups["func1"].Value;
-                    var func2 = match.Groups["func2"].Value;
-                    var numerator = match.Groups["numerator"];
-                    var denominator = match.Groups["denominator"];
+                    var exprSet = new HashSet<string>();
+                    foreach(Match ma in matches)
+                    {
+                        exprSet.Add(ma.Value);
+                        TestContext.WriteLine($"{m.Name} => {ma.Value}");
+                    }
                 }
             }
         }
