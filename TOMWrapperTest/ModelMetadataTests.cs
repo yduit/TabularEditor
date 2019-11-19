@@ -79,23 +79,23 @@ namespace TOMWrapperTest
         [TestMethod]
         public void GetMeasureDependsTest()
         {
-            var orgModel = new TabularModelHandler("AdventureWorks2.bim");
+            var orgModel = new TabularModelHandler("dss2.bim");
             var measures = orgModel.Model.AllMeasures.ToList();
-            Assert.AreEqual(58, measures.Count);
-            string measureName = "Distinct Count Sales Orders";
-            var measure = measures.Where(m => m.Name == measureName).FirstOrDefault();
-            Assert.IsNotNull(measure);
-            Assert.AreEqual(measureName, measure.Name);
-            Assert.AreEqual("[Reseller Distinct Count Sales Order] + [Internet Distinct Count Sales Order]", measure.Expression);
-            Assert.AreEqual("Sales Territory", measure.Table.Name);
-            var depends = measure.DependsOn;
-            var relatedMeasures = depends.Measures.ToList();
-            Assert.AreEqual(2, relatedMeasures.Count);
-            Assert.AreEqual("Reseller Sales", relatedMeasures[0].Table.Name);
-            Assert.AreEqual("Internet Sales", relatedMeasures[1].Table.Name);
+            //Assert.AreEqual(58, measures.Count);
+            //string measureName = "Distinct Count Sales Orders";
+            //var measure = measures.Where(m => m.Name == measureName).FirstOrDefault();
+            //Assert.IsNotNull(measure);
+            //Assert.AreEqual(measureName, measure.Name);
+            //Assert.AreEqual("[Reseller Distinct Count Sales Order] + [Internet Distinct Count Sales Order]", measure.Expression);
+            //Assert.AreEqual("Sales Territory", measure.Table.Name);
+            //var depends = measure.DependsOn;
+            //var relatedMeasures = depends.Measures.ToList();
+            //Assert.AreEqual(2, relatedMeasures.Count);
+            //Assert.AreEqual("Reseller Sales", relatedMeasures[0].Table.Name);
+            //Assert.AreEqual("Internet Sales", relatedMeasures[1].Table.Name);
 
-            var refBy = relatedMeasures[0].ReferencedBy; //measureName = "Distinct Count Sales Orders";
-            Assert.AreEqual(1, refBy.Count);
+            //var refBy = relatedMeasures[0].ReferencedBy; //measureName = "Distinct Count Sales Orders";
+            //Assert.AreEqual(1, refBy.Count);
 
             foreach(var m in measures)
             {
@@ -182,12 +182,12 @@ namespace TOMWrapperTest
         [TestMethod]
         public void ColumnListTest()
         {
-            var orgModel = new TabularModelHandler("AdventureWorks2.bim");
+            var orgModel = new TabularModelHandler("dss2.bim");
             var columns = orgModel.Model.AllColumns.ToList();
-            Assert.AreEqual(203, columns.Count);
+            //Assert.AreEqual(203, columns.Count);
             foreach (var col in columns)
             {
-                TestContext.WriteLine($"[{col.Table.Name}].[{col.Name}]");
+                TestContext.WriteLine($"[{col.Table.Name}].[{col.Name}] ({col.DataType})");
             }
         }
 
@@ -202,6 +202,62 @@ namespace TOMWrapperTest
             {
                 TestContext.WriteLine($"{r.FromTable.Name}.{r.FromColumn.Name} => {r.ToTable.Name}.{r.ToColumn.Name}");
             }
+        }
+
+        [TestMethod]
+        public void GetRelatedTablesFromColumnsTest()
+        {
+            var orgModel = new TabularModelHandler("dss2.bim");
+            var columns = orgModel.Model.AllColumns.ToList();
+            List<Column> selectedColumns = new List<Column>();
+            List<Measure> selectedMeasures = new List<Measure>();
+            HashSet<Table> selectedTables = new HashSet<Table>();
+
+            var booked_Accounts = columns.Where(c => c.Name == "Booked_Accounts").First(); // orig
+            Assert.IsNotNull(booked_Accounts);
+            selectedColumns.Add(booked_Accounts);
+            selectedTables.Add(booked_Accounts.Table);
+
+            var yearMonth = columns.Where(c => c.Name == "YearMonth").First(); // date
+            Assert.IsNotNull(yearMonth);
+            selectedColumns.Add(yearMonth);
+            selectedTables.Add(yearMonth.Table);
+
+            var lc_group = columns.Where(c => c.Name == "Life_Cycle_Group").First(); // groupcontrol
+            Assert.IsNotNull(lc_group);
+            selectedColumns.Add(lc_group);
+            selectedTables.Add(lc_group.Table);
+
+            var month = columns.Where(c => c.Name == "Month" && c.Table.Name != "Test_Date").First(); // vint
+            Assert.IsNotNull(month);
+            Assert.AreEqual("Test_Vint", month.Table.Name);
+            selectedColumns.Add(month);
+            selectedTables.Add(month.Table);
+
+            var pd2 = orgModel.Model.AllMeasures.Where(m => m.Name == "PD2").First();
+            Assert.IsNotNull(pd2);
+            selectedMeasures.Add(pd2);
+            selectedTables.Add(pd2.Table);
+
+            var relationships = orgModel.Model.Relationships;
+            List<Relationship> relatedRelaships = new List<Relationship>();
+
+            HashSet<Table> loopTables = new HashSet<Table>(selectedTables);
+            Table factTable = pd2.Table;
+
+            // remove fact table first
+            loopTables.Remove(factTable);
+            foreach (var t in selectedTables)
+            {
+                foreach(var r in relationships)
+                {
+                    if(r.FromTable == factTable)
+                    {
+                        loopTables.Remove(r.ToTable);
+                    }
+                }
+            }
+            // all direct tables are removed. remain tables at least one hub away
         }
     }
 }

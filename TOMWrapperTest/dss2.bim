@@ -1,0 +1,419 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1200,
+  "model": {
+    "dataSources": [
+      {
+        "name": "New Provider Data Source",
+        "connectionString": "Data Source=.;Initial Catalog=DSS2;Integrated Security=True",
+        "impersonationMode": "impersonateServiceAccount",
+        "provider": "System.Data.SqlClient"
+      }
+    ],
+    "tables": [
+      {
+        "name": "Test_Date",
+        "columns": [
+          {
+            "name": "DateKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "DateKey",
+            "sourceProviderType": "int"
+          },
+          {
+            "name": "Date",
+            "dataType": "dateTime",
+            "sourceColumn": "Date",
+            "sourceProviderType": "datetime"
+          },
+          {
+            "name": "Year",
+            "dataType": "int64",
+            "sourceColumn": "Year",
+            "sourceProviderType": "smallint"
+          },
+          {
+            "name": "Semester",
+            "dataType": "string",
+            "sourceColumn": "Semester",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "Quarter",
+            "dataType": "string",
+            "sourceColumn": "Quarter",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "YearMonth",
+            "dataType": "string",
+            "sourceColumn": "YearMonth",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "YearMonthDay",
+            "dataType": "string",
+            "sourceColumn": "YearMonthDay",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "Month",
+            "dataType": "int64",
+            "sourceColumn": "Month",
+            "sourceProviderType": "tinyint"
+          },
+          {
+            "name": "MonthKey",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "MonthKey",
+            "sourceProviderType": "int"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Test_Date",
+            "source": {
+              "type": "query",
+              "query": [
+                "SELECT",
+                "\t*",
+                "FROM",
+                "\t[dbo].[Test_Date]"
+              ],
+              "dataSource": "New Provider Data Source"
+            },
+            "annotations": [
+              {
+                "name": "TabularEditor_TableSchema",
+                "value": "{\"Name\":\"Test_Date\",\"Schema\":\"dbo\",\"Database\":\"DSS2\",\"IncludedColumns\":[\"DateKey\",\"Date\",\"Year\",\"Semester\",\"Quarter\",\"YearMonth\",\"YearMonthDay\",\"Month\",\"MonthKey\"],\"SelectAll\":true}"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Test_GroupControl",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ID",
+            "sourceProviderType": "int"
+          },
+          {
+            "name": "RiskSeg",
+            "dataType": "string",
+            "sourceColumn": "RiskSeg",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "Channel",
+            "dataType": "string",
+            "sourceColumn": "Channel",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "Life_Cycle_Group",
+            "dataType": "string",
+            "sourceColumn": "Life_Cycle_Group",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "Time_Response_Group",
+            "dataType": "string",
+            "sourceColumn": "Time_Response_Group",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "Segment",
+            "dataType": "string",
+            "sourceColumn": "Segment",
+            "sourceProviderType": "nvarchar"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Test_GroupControl",
+            "source": {
+              "type": "query",
+              "query": [
+                "SELECT",
+                "\t*",
+                "FROM",
+                "\t[dbo].[Test_GroupControl]"
+              ],
+              "dataSource": "New Provider Data Source"
+            },
+            "annotations": [
+              {
+                "name": "TabularEditor_TableSchema",
+                "value": "{\"Name\":\"Test_GroupControl\",\"Schema\":\"dbo\",\"Database\":\"DSS2\",\"IncludedColumns\":[\"ID\",\"RiskSeg\",\"Channel\",\"Life_Cycle_Group\",\"Time_Response_Group\",\"Segment\"],\"SelectAll\":true}"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Test_Orig",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ID",
+            "sourceProviderType": "int"
+          },
+          {
+            "name": "RiskSeg",
+            "dataType": "string",
+            "sourceColumn": "RiskSeg",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "Channel",
+            "dataType": "string",
+            "sourceColumn": "Channel",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "Vintage_Name",
+            "dataType": "string",
+            "sourceColumn": "Vintage_Name",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "Vintage_Date",
+            "dataType": "int64",
+            "sourceColumn": "Vintage_Date",
+            "sourceProviderType": "int"
+          },
+          {
+            "name": "Time_Span",
+            "dataType": "string",
+            "sourceColumn": "Time_Span",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "Booked_Accounts",
+            "dataType": "int64",
+            "sourceColumn": "Booked_Accounts",
+            "sourceProviderType": "int"
+          },
+          {
+            "name": "Initial_Average_Line",
+            "dataType": "double",
+            "sourceColumn": "Initial_Average_Line",
+            "sourceProviderType": "float"
+          },
+          {
+            "name": "DtDContributor",
+            "dataType": "string",
+            "sourceColumn": "DtDContributor",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "GroupControl_ID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "GroupControl_ID",
+            "sourceProviderType": "int"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Test_Orig",
+            "source": {
+              "type": "query",
+              "query": [
+                "SELECT",
+                "\t*",
+                "FROM",
+                "\t[dbo].[Test_Orig]"
+              ],
+              "dataSource": "New Provider Data Source"
+            },
+            "annotations": [
+              {
+                "name": "TabularEditor_TableSchema",
+                "value": "{\"Name\":\"Test_Orig\",\"Schema\":\"dbo\",\"Database\":\"DSS2\",\"IncludedColumns\":[\"ID\",\"RiskSeg\",\"Channel\",\"Vintage_Name\",\"Vintage_Date\",\"Time_Span\",\"Booked_Accounts\",\"Initial_Average_Line\",\"DtDContributor\",\"GroupControl_ID\"],\"SelectAll\":true}"
+              }
+            ]
+          }
+        ],
+        "measures": [
+          {
+            "name": "Sum_of_Booked_Accounts",
+            "expression": "SUM([Booked_Accounts])"
+          }
+        ]
+      },
+      {
+        "name": "Test_Vint",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "ID",
+            "sourceProviderType": "int"
+          },
+          {
+            "name": "RiskSeg",
+            "dataType": "string",
+            "sourceColumn": "RiskSeg",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "Channel",
+            "dataType": "string",
+            "sourceColumn": "Channel",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "Month",
+            "dataType": "int64",
+            "sourceColumn": "Month",
+            "sourceProviderType": "int"
+          },
+          {
+            "name": "Vintage_Name",
+            "dataType": "string",
+            "sourceColumn": "Vintage_Name",
+            "sourceProviderType": "nvarchar"
+          },
+          {
+            "name": "Active_Accounts",
+            "dataType": "double",
+            "sourceColumn": "Active_Accounts",
+            "sourceProviderType": "float"
+          },
+          {
+            "name": "Default_Accounts",
+            "dataType": "double",
+            "sourceColumn": "Default_Accounts",
+            "sourceProviderType": "float"
+          },
+          {
+            "name": "Exposure",
+            "dataType": "double",
+            "sourceColumn": "Exposure",
+            "sourceProviderType": "float"
+          },
+          {
+            "name": "MOB",
+            "dataType": "int64",
+            "sourceColumn": "MOB",
+            "sourceProviderType": "int"
+          },
+          {
+            "name": "Origination_ID",
+            "dataType": "int64",
+            "isHidden": true,
+            "sourceColumn": "Origination_ID",
+            "sourceProviderType": "int"
+          },
+          {
+            "name": "Cumulative_Default_Accounts",
+            "dataType": "double",
+            "sourceColumn": "Cumulative_Default_Accounts",
+            "sourceProviderType": "float"
+          },
+          {
+            "name": "PD",
+            "dataType": "double",
+            "sourceColumn": "PD",
+            "sourceProviderType": "float"
+          },
+          {
+            "name": "Cumulative_PD",
+            "dataType": "double",
+            "sourceColumn": "Cumulative_PD",
+            "sourceProviderType": "float"
+          },
+          {
+            "name": "EAD",
+            "dataType": "double",
+            "sourceColumn": "EAD",
+            "sourceProviderType": "float"
+          },
+          {
+            "name": "AD",
+            "dataType": "double",
+            "sourceColumn": "AD",
+            "sourceProviderType": "float"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Test_Vint",
+            "source": {
+              "type": "query",
+              "query": [
+                "SELECT",
+                "\t*",
+                "FROM",
+                "\t[dbo].[Test_Vint]"
+              ],
+              "dataSource": "New Provider Data Source"
+            },
+            "annotations": [
+              {
+                "name": "TabularEditor_TableSchema",
+                "value": "{\"Name\":\"Test_Vint\",\"Schema\":\"dbo\",\"Database\":\"DSS2\",\"IncludedColumns\":[\"ID\",\"RiskSeg\",\"Channel\",\"Month\",\"Vintage_Name\",\"Active_Accounts\",\"Default_Accounts\",\"Exposure\",\"MOB\",\"Origination_ID\",\"Cumulative_Default_Accounts\",\"PD\",\"Cumulative_PD\",\"EAD\",\"AD\"],\"SelectAll\":true}"
+              }
+            ]
+          }
+        ],
+        "measures": [
+          {
+            "name": "Sum_of_Default_Accounts",
+            "expression": "SUM([Default_Accounts])"
+          },
+          {
+            "name": "PD2",
+            "expression": "[Sum_of_Default_Accounts]/[Sum_of_Booked_Accounts]"
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "a03fd9d8-1298-4bf5-a216-d98fc1552ab6",
+        "fromTable": "Test_Orig",
+        "fromColumn": "Vintage_Date",
+        "toTable": "Test_Date",
+        "toColumn": "DateKey"
+      },
+      {
+        "name": "32bbd7f8-720f-4662-913f-86bdfdcd1800",
+        "fromTable": "Test_Orig",
+        "fromColumn": "GroupControl_ID",
+        "toTable": "Test_GroupControl",
+        "toColumn": "ID"
+      },
+      {
+        "name": "949ef96a-bfad-451c-a4d3-2e1834cb8309",
+        "fromTable": "Test_Vint",
+        "fromColumn": "Origination_ID",
+        "toTable": "Test_Orig",
+        "toColumn": "ID"
+      },
+      {
+        "name": "ddab106f-a0ad-4d34-bb31-04239ce20a21",
+        "fromTable": "Test_Vint",
+        "fromColumn": "Month",
+        "toTable": "Test_Date",
+        "toColumn": "DateKey"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "TabularEditor_SerializeOptions",
+        "value": "{\"IgnoreInferredObjects\":true,\"IgnoreInferredProperties\":true,\"IgnoreTimestamps\":true,\"SplitMultilineStrings\":true,\"PrefixFilenames\":false,\"LocalTranslations\":false,\"LocalPerspectives\":false,\"LocalRelationships\":false,\"Levels\":[\"Data Sources\",\"Perspectives\",\"Relationships\",\"Roles\",\"Tables\",\"Tables/Columns\",\"Tables/Hierarchies\",\"Tables/Measures\",\"Tables/Partitions\",\"Translations\"]}"
+      }
+    ]
+  }
+}
