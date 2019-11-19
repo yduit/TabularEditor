@@ -77,6 +77,75 @@ namespace TOMWrapperTest
         }
 
         [TestMethod]
+        public void GetMeasureDependsTest()
+        {
+            var orgModel = new TabularModelHandler("AdventureWorks2.bim");
+            var measures = orgModel.Model.AllMeasures.ToList();
+            Assert.AreEqual(58, measures.Count);
+            string measureName = "Distinct Count Sales Orders";
+            var measure = measures.Where(m => m.Name == measureName).FirstOrDefault();
+            Assert.IsNotNull(measure);
+            Assert.AreEqual(measureName, measure.Name);
+            Assert.AreEqual("[Reseller Distinct Count Sales Order] + [Internet Distinct Count Sales Order]", measure.Expression);
+            Assert.AreEqual("Sales Territory", measure.Table.Name);
+            var depends = measure.DependsOn;
+            var relatedMeasures = depends.Measures.ToList();
+            Assert.AreEqual(2, relatedMeasures.Count);
+            Assert.AreEqual("Reseller Sales", relatedMeasures[0].Table.Name);
+            Assert.AreEqual("Internet Sales", relatedMeasures[1].Table.Name);
+
+            var refBy = relatedMeasures[0].ReferencedBy; //measureName = "Distinct Count Sales Orders";
+            Assert.AreEqual(1, refBy.Count);
+
+            foreach(var m in measures)
+            {
+                PrintMeasure(m);
+                TestContext.WriteLine($"\nMeasure ===> {m.Expression}");
+                
+                foreach(var dm in m.DependsOn.Measures)
+                {
+                    TestContext.WriteLine($"Measures: {dm.Name}");
+                }
+
+                foreach (var dm in m.DependsOn.Tables)
+                {
+                    TestContext.WriteLine($"Tables: {dm.Name}");
+                }
+
+                foreach (var dm in m.DependsOn.Columns)
+                {
+                    TestContext.WriteLine($"Columns: [{dm.Table.Name}].[{dm.Name}]");
+                }
+
+                if((m.DependsOn.Measures?.ToArray().Length > 0 || m.DependsOn.Columns?.ToArray().Length > 0)
+                    && m.DependsOn.Tables?.ToArray().Length == 0 )
+                {
+                    TestContext.WriteLine("Expanded measure expression:");
+                }
+            }
+        }
+
+        private void PrintMeasure(Measure measure)
+        {
+            TestContext.WriteLine($"\n{measure.Name} := {measure.Expression}");
+            if (measure.DependsOn.Measures?.ToArray().Length == 0 &&
+                    measure.DependsOn.Columns?.ToArray().Length == 1)
+            {
+                string exp = measure.Expression.Replace($"[{measure.DependsOn.Columns.ToArray()[0].Name}]",
+                    $"[{measure.DependsOn.Columns.ToArray()[0].Table.Name}].[{measure.DependsOn.Columns.ToArray()[0].Name}]");
+
+                TestContext.WriteLine($"<===> {exp}");
+            }
+
+            if (measure.DependsOn.Measures?.ToArray().Length > 0)
+            {
+                foreach(var m in measure.DependsOn.Measures)
+                {
+                    PrintMeasure(m);
+                }
+            }
+        }
+        [TestMethod]
         public void GetRelatedTablesInMeasureTest()
         {
             var orgModel = new TabularModelHandler("AdventureWorks2.bim");
@@ -116,6 +185,10 @@ namespace TOMWrapperTest
             var orgModel = new TabularModelHandler("AdventureWorks2.bim");
             var columns = orgModel.Model.AllColumns.ToList();
             Assert.AreEqual(203, columns.Count);
+            foreach (var col in columns)
+            {
+                TestContext.WriteLine($"[{col.Table.Name}].[{col.Name}]");
+            }
         }
 
         [TestMethod]
