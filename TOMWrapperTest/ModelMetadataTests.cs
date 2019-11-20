@@ -240,7 +240,7 @@ namespace TOMWrapperTest
             selectedTables.Add(pd2.Table);
 
             var relationships = orgModel.Model.Relationships;
-            List<Relationship> relatedRelaships = new List<Relationship>();
+            HashSet<Relationship> relatedRelaships = new HashSet<Relationship>();
 
             HashSet<Table> loopTables = new HashSet<Table>(selectedTables);
             Table factTable = pd2.Table;
@@ -253,11 +253,22 @@ namespace TOMWrapperTest
                 {
                     if(r.FromTable == factTable)
                     {
+                        relatedRelaships.Add(r);
                         loopTables.Remove(r.ToTable);
                     }
                 }
             }
             // all direct tables are removed. remain tables at least one hub away
+            foreach(var t in loopTables)
+            {
+                foreach(var r in relationships)
+                {
+                    if(r.ToTable == t)
+                    {
+                        relatedRelaships.Add(r);
+                    }
+                }
+            }
         }
     }
 }
