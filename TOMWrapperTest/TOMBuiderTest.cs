@@ -34,10 +34,10 @@ namespace AibiSoft.Data.Tests
             ds.Password = "xyz123";
             ds.ImpersonationMode = TabularEditor.TOMWrapper.ImpersonationMode.ImpersonateAccount;
             // add tables
-            builder.AddTable(db.Tables.Where(t => t.Name == "Test_Vint").First());
-            builder.AddTable(db.Tables.Where(t => t.Name == "Test_Orig").First());
-            builder.AddTable(db.Tables.Where(t => t.Name == "Test_GroupControl").First());
-            builder.AddTable(db.Tables.Where(t => t.Name == "Test_Date").First());
+            builder.AddTable0(db.Tables.Where(t => t.Name == "Test_Vint").First());
+            builder.AddTable0(db.Tables.Where(t => t.Name == "Test_Orig").First());
+            builder.AddTable0(db.Tables.Where(t => t.Name == "Test_GroupControl").First());
+            builder.AddTable0(db.Tables.Where(t => t.Name == "Test_Date").First());
             
             // add relationships
 
