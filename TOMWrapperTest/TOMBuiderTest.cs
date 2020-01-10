@@ -31,7 +31,7 @@ namespace AibiSoft.Data.Tests
             ds.ConnectionString = connStr;
             ds.Provider = "System.Data.SqlClient";
             ds.Password = "xyz123";
-            ds.ImpersonationMode = TabularEditor.TOMWrapper.ImpersonationMode.Default;
+            ds.ImpersonationMode = TabularEditor.TOMWrapper.ImpersonationMode.ImpersonateAccount;
             // add tables
             builder.AddTable(db.Tables.Where(t => t.Name == "Test_Vint").First());
             builder.AddTable(db.Tables.Where(t => t.Name == "Test_Orig").First());
@@ -53,17 +53,30 @@ namespace AibiSoft.Data.Tests
             var date_datekey = model.Tables["Test_Date"].Columns["DateKey"];
             vint_fk_month.RelateTo(date_datekey);
             // orig.vintage_date => date.DateKey
-            /*
             var vint_fk_vintage_date = model.Tables["Test_Orig"].Columns["Vintage_Date"];
+            /*
+            
             vint_fk_month.RelateTo(date_datekey);
             */
             var rel = model.AddRelationship();
-            rel.FromColumn = vint_fk_month;
+            rel.FromColumn = vint_fk_vintage_date;
             rel.ToColumn = date_datekey;
+
+            // add sum over sum measures
+            model.Tables["Test_Vint"].AddMeasure("PD2", "[Sum_of_Default_Accounts]/[Sum_of_Booked_Accounts]");
+            model.Tables["Test_Vint"].AddMeasure("AD2", "Sum('Test_Vint'[Active_Accounts])/Sum('Test_Vint'[Default_Accounts])");
 
             builder.Save("dsstest.json");
             //var model = new StarModel("select * from [Alphabetical list of products]");
             //model.Init(dbConnection);
+        }
+
+        [TestMethod]
+        public void RelationshipTest()
+        {
+            var builder = new TOMBuilder("dsstest.json");
+            var model = builder.Model;
+            Assert.IsTrue(model.AllMeasures.Count() > 5);
         }
     }
 }
